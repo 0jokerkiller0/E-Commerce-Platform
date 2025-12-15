@@ -14,3 +14,29 @@ def home(request):
         'categories': categories,
     }
     return render(request, 'home.html', context)
+
+def products_list(request):
+    """Display all products"""
+    products = Product.objects.filter(is_active=True)
+    categories = Category.objects.filter(is_active=True)
+    
+    context = {
+        'products': products,
+        'categories': categories,
+    }
+    return render(request, 'products_list.html', context)
+
+def vendors_list(request):
+    """Display all vendors"""
+    vendors = Vendor.objects.filter(is_active=True)
+    
+    context = {
+        'vendors': vendors,
+    }
+    return render(request, 'vendors_list.html', context)
+
+def cart_view(request):
+    """Display shopping cart"""
+    # Cart functionality will be added later
+    context = {}
+    return render(request, 'cart.html', context)

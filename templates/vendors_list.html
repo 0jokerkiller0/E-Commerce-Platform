@@ -1,0 +1,31 @@
+{% extends 'home.html' %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Our Vendors</h1>
+    
+    <div class="row">
+        {% if vendors %}
+            {% for vendor in vendors %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ vendor.store_name }}</h5>
+                        <p class="card-text">{{ vendor.store_description|truncatewords:20 }}</p>
+                        <p class="text-muted"><i class="fas fa-phone"></i> {{ vendor.phone_number }}</p>
+                        <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ vendor.address }}</p>
+                        <a href="#" class="btn btn-primary">View Store</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h4>No vendors available yet!</h4>
+                    <p>Please add vendors from the <a href="/admin/">admin panel</a>.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

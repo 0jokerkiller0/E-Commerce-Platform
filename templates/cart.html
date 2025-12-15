@@ -1,0 +1,17 @@
+{% extends 'home.html' %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Shopping Cart</h1>
+    
+    <div class="alert alert-info">
+        <h4>Your cart is empty!</h4>
+        <p>Start shopping by browsing our <a href="{% url 'products_list' %}">products</a>.</p>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'products_list' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-shopping-bag"></i> Continue Shopping
+        </a>
+    </div>
+</div>
+{% endblock %}
