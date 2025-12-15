@@ -1,31 +1,167 @@
-{% extends 'home.html' %}
+{% extends 'base.html' %}
+
+{% block title %}Vendors - E-Marketplace{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <h1 class="mb-4">Our Vendors</h1>
-    
-    <div class="row">
-        {% if vendors %}
-            {% for vendor in vendors %}
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ vendor.store_name }}</h5>
-                        <p class="card-text">{{ vendor.store_description|truncatewords:20 }}</p>
-                        <p class="text-muted"><i class="fas fa-phone"></i> {{ vendor.phone_number }}</p>
-                        <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ vendor.address }}</p>
-                        <a href="#" class="btn btn-primary">View Store</a>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="mb-2"><i class="fas fa-store me-2"></i>Our Vendors</h1>
+            <p class="mb-0 opacity-75">Shop from trusted and verified vendors</p>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <!-- Search & Filter -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="search-box d-flex">
+                    <input type="text" placeholder="Search vendors..." class="flex-grow-1">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% if vendors %}
+                {% for vendor in vendors %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto">{{ vendor.store_name|slice:":1"|upper }}</div>
+                            <h5 class="mt-3 mb-1">{{ vendor.store_name }}</h5>
+                            <p class="text-muted small mb-3">{{ vendor.store_description|truncatewords:15|default:"Quality products at best prices" }}</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted"> 4.0</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">{{ vendor.products.count|default:"0" }}</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">100+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="col-12">
-                <div class="alert alert-info">
-                    <h4>No vendors available yet!</h4>
-                    <p>Please add vendors from the <a href="/admin/">admin panel</a>.</p>
+                {% endfor %}
+            {% else %}
+                <!-- Demo Vendors -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto">T</div>
+                            <h5 class="mt-3 mb-1">Tech Store</h5>
+                            <p class="text-muted small mb-3">Your one-stop shop for all electronics and gadgets</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span class="text-muted"> 4.8</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">120</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">500+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        {% endif %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">F</div>
+                            <h5 class="mt-3 mb-1">Fashion Hub</h5>
+                            <p class="text-muted small mb-3">Trendy fashion and accessories for everyone</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted"> 4.6</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">85</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">350+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">S</div>
+                            <h5 class="mt-3 mb-1">Sports Zone</h5>
+                            <p class="text-muted small mb-3">Premium sports gear and fitness equipment</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="text-muted"> 4.9</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">65</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">280+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">B</div>
+                            <h5 class="mt-3 mb-1">Beauty Store</h5>
+                            <p class="text-muted small mb-3">Cosmetics, skincare and beauty essentials</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted"> 4.7</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">90</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">420+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">H</div>
+                            <h5 class="mt-3 mb-1">Home Decor</h5>
+                            <p class="text-muted small mb-3">Transform your home with our beautiful decor</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted"> 4.5</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">45</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">150+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="vendor-avatar mx-auto" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">G</div>
+                            <h5 class="mt-3 mb-1">Gadget World</h5>
+                            <p class="text-muted small mb-3">Latest gadgets and smart devices</p>
+                            <div class="rating mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted"> 4.4</span></div>
+                            <div class="d-flex justify-content-center gap-4 mb-3">
+                                <div class="text-center"><h6 class="mb-0">110</h6><small class="text-muted">Products</small></div>
+                                <div class="text-center"><h6 class="mb-0">380+</h6><small class="text-muted">Orders</small></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-primary flex-grow-1"><i class="fas fa-store me-1"></i> Visit Store</a>
+                                <button class="btn btn-outline-primary"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Become a Vendor Section -->
+        <div class="mt-5 p-5 text-center rounded-4" style="background: linear-gradient(135deg, var(--primary-color) 0%, #7c3aed 100%); color: white;">
+            <h3 class="mb-3">Want to Sell on E-Marketplace?</h3>
+            <p class="mb-4 opacity-75">Join thousands of successful vendors and grow your business with us!</p>
+            <a href="/admin/" class="btn btn-light btn-lg px-5"><i class="fas fa-rocket me-2"></i>Become a Vendor</a>
+        </div>
     </div>
-</div>
 {% endblock %}
