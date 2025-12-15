@@ -1,5 +1,9 @@
 # E-Commerce Multivendor Platform
 
+![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)
+![Django](https://img.shields.io/badge/Django-6.0-green.svg)
+![License](https://img.shields.io/badge/License-Educational-yellow.svg)
+
 A comprehensive multivendor e-commerce platform built with Django and Python.
 
 ## Features
@@ -43,7 +47,11 @@ A comprehensive multivendor e-commerce platform built with Django and Python.
 
 ## Installation
 
-1. Clone the repository or navigate to the project directory
+1. Clone the repository:
+```bash
+git clone https://github.com/0jokerkiller0/E-Commerce-Platform.git
+cd E-Commerce-Platform
+```
 
 2. Create a virtual environment (recommended):
 ```bash
@@ -169,12 +177,14 @@ To add new features:
 
 ## Technologies Used
 
-- Python 3.13+
-- Django 6.0
-- SQLite (Development)
-- Django REST Framework
-- Crispy Forms
-- Bootstrap 4
+- **Python** 3.13+
+- **Django** 6.0
+- **SQLite** (Development)
+- **Django REST Framework** 3.16.1
+- **Pillow** 11.1.0 (Image handling)
+- **django-crispy-forms** 2.5
+- **crispy-bootstrap4** 2025.6
+- **Bootstrap** 4
 
 ## License
 
