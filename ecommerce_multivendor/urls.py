@@ -19,13 +19,20 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from accounts import views as accounts_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('products/', views.products_list, name='products_list'),
     path('vendors/', views.vendors_list, name='vendors_list'),
-    path('cart/', views.cart_view, name='cart'),
+    path('cart/', include('cart.urls')),
+    path('accounts/', include('accounts.urls')),
+    
+    # Authentication URLs
+    path('login/', accounts_views.login_view, name='login'),
+    path('logout/', accounts_views.logout_view, name='logout'),
+    path('register/', accounts_views.register_view, name='register'),
 ]
 
 # Serve media files in development

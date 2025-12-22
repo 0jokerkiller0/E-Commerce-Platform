@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config, Csv
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,17 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-czb!(9k@%8218n9n!eu9f=t_6v()a!d+plehsv%^#dk6c9^rej')
+SECRET_KEY = 'django-insecure-=r%+%z$3^@&5!k63!3o!+*5u%_k%2!+2%_%$+5%$+5%$+5%$+5%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
-
-# Allow all Render.com domains in production
-import os
-if os.getenv('RENDER'):
-    ALLOWED_HOSTS.append('.onrender.com')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -67,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.AdminAccessMiddleware',  # Custom middleware to restrict admin access
 ]
 
 ROOT_URLCONF = 'ecommerce_multivendor.urls'

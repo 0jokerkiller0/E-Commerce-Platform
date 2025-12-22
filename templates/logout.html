@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged Out | E-Marketplace{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-light min-vh-100 d-flex align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg border-0 rounded-3 text-center">
+                    <div class="card-header bg-info text-white py-4">
+                        <h3 class="mb-0">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logged Out
+                        </h3>
+                    </div>
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle fa-3x text-success"></i>
+                        </div>
+                        <h4 class="mb-3">You have been successfully logged out!</h4>
+                        <p class="text-muted mb-4">Thank you for visiting our marketplace. Come back soon!</p>
+                        
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg rounded-pill px-4">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login Again
+                            </a>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                                <i class="fas fa-home me-2"></i>Go Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

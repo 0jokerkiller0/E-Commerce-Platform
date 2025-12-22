@@ -4,7 +4,7 @@
 
 {% block content %}
     <!-- Page Header -->
-    <div class="page-header">
+    <div class="page-header bg-light py-4">
         <div class="container">
             <h1 class="mb-2"><i class="fas fa-box me-2"></i>All Products</h1>
             <p class="mb-0 opacity-75">Discover amazing products from verified vendors</p>
@@ -15,25 +15,26 @@
         <div class="row">
             <!-- Filters Sidebar -->
             <div class="col-lg-3 mb-4">
-                <div class="filter-sidebar">
-                    <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filters</h5>
-                    
-                    <div class="mb-4">
-                        <h6 class="text-muted mb-2">Categories</h6>
-                        {% if categories %}
-                            {% for category in categories %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="cat{{ forloop.counter }}">
-                                <label class="form-check-label" for="cat{{ forloop.counter }}">{{ category.name }}</label>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="cat1"><label class="form-check-label" for="cat1">Electronics</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="cat2"><label class="form-check-label" for="cat2">Fashion</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="cat3"><label class="form-check-label" for="cat3">Home & Living</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="cat4"><label class="form-check-label" for="cat4">Sports</label></div>
-                        {% endif %}
-                    </div>
+                <form method="get" id="filter-form">
+                    <div class="filter-sidebar bg-white p-4 rounded-3 shadow-sm">
+                        <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filters</h5>
+                        
+                        <div class="mb-4">
+                            <h6 class="text-muted mb-2">Categories</h6>
+                            {% if categories %}
+                                {% for category in categories %}
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="category" id="cat{{ forloop.counter }}" value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}checked{% endif %}>
+                                    <label class="form-check-label" for="cat{{ forloop.counter }}">{{ category.name }}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="form-check mb-2"><input class="form-check-input" type="radio" name="category" id="cat1" value="1" {% if request.GET.category == '1' %}checked{% endif %}><label class="form-check-label" for="cat1">Electronics</label></div>
+                                <div class="form-check mb-2"><input class="form-check-input" type="radio" name="category" id="cat2" value="2" {% if request.GET.category == '2' %}checked{% endif %}><label class="form-check-label" for="cat2">Fashion</label></div>
+                                <div class="form-check mb-2"><input class="form-check-input" type="radio" name="category" id="cat3" value="3" {% if request.GET.category == '3' %}checked{% endif %}><label class="form-check-label" for="cat3">Home & Living</label></div>
+                                <div class="form-check mb-2"><input class="form-check-input" type="radio" name="category" id="cat4" value="4" {% if request.GET.category == '4' %}checked{% endif %}><label class="form-check-label" for="cat4">Sports</label></div>
+                            {% endif %}
+                        </div>
                     
                     <div class="mb-4">
                         <h6 class="text-muted mb-2">Price Range</h6>
@@ -45,12 +46,13 @@
                     
                     <div class="mb-4">
                         <h6 class="text-muted mb-2">Rating</h6>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="r4"><label class="form-check-label" for="r4"><span class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span> & Up</label></div>
-                        <div class="form-check"><input class="form-check-input" type="checkbox" id="r3"><label class="form-check-label" for="r3"><span class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span> & Up</label></div>
+                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="r4"><label class="form-check-label" for="r4"><span class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span> & Up</label></div>
+                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="r3"><label class="form-check-label" for="r3"><span class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span> & Up</label></div>
                     </div>
                     
-                    <button class="btn btn-primary w-100">Apply Filters</button>
+                    <button class="btn btn-primary w-100" type="submit">Apply Filters</button>
                 </div>
+            </form>
             </div>
             
             <!-- Products Grid -->
@@ -73,7 +75,7 @@
                     {% if products %}
                         {% for product in products %}
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     {% if product.images.first %}
                                     <img src="{{ product.images.first.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
@@ -82,7 +84,11 @@
                                     {% endif %}
                                     {% if product.is_featured %}<span class="badge badge-new">Featured</span>{% endif %}
                                     <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
-                                        <button class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -100,10 +106,17 @@
                     {% else %}
                         <!-- Demo Products -->
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Headphones">
                                     <span class="badge badge-new">New</span>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <form method="post" action="{% url 'add_to_cart' 1 %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Tech Store</p>
@@ -117,9 +130,16 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Watch">
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <form method="post" action="{% url 'add_to_cart' 2 %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Fashion Hub</p>
@@ -133,10 +153,17 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Shoes">
                                     <span class="badge badge-discount">20% OFF</span>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <form method="post" action="{% url 'add_to_cart' 3 %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Sports Zone</p>
@@ -150,9 +177,16 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Perfume">
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <form method="post" action="{% url 'add_to_cart' 4 %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Beauty Store</p>
@@ -166,9 +200,16 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Sneakers">
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <form method="post" action="{% url 'add_to_cart' 5 %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Sports Zone</p>
@@ -182,10 +223,13 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 product-card">
                                 <div class="position-relative overflow-hidden">
                                     <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Camera">
                                     <span class="badge badge-new">New</span>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                        <button class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="text-muted small mb-1">Tech Store</p>
@@ -214,4 +258,33 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+<style>
+    /* Add hover effects to product cards */
+    .product-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Style the filter sidebar */
+    .filter-sidebar {
+        border: 1px solid #e5e7eb;
+    }
+</style>
+
+{% block extra_js %}
+    <script>
+        // Auto-submit form when category is selected
+        document.querySelectorAll('input[name="category"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('filter-form').submit();
+            });
+        });
+    </script>
 {% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - E-Marketplace{% endblock %}
+
+{% block content %}
+    <!-- Page Header -->
+    <div class="page-header bg-light py-4">
+        <div class="container">
+            <h1 class="mb-2"><i class="fas fa-user me-2"></i>My Profile</h1>
+            <p class="mb-0 opacity-75">Manage your personal information</p>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" class="rounded-circle mb-3" alt="{{ user.username }}" width="150" height="150">
+                        {% else %}
+                            <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                                <i class="fas fa-user fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <h5 class="mb-1">{{ user.get_full_name|default:user.username }}</h5>
+                        <p class="text-muted mb-3">{{ user.user_type|title }}</p>
+                        <p class="small text-muted mb-0">Member since {{ user.date_joined|date:"F Y" }}</p>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="{% url 'orders' %}"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                            <li class="mb-2"><a href="#"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
+                            <li class="mb-2"><a href="#"><i class="fas fa-map-marker-alt me-2"></i>Addresses</a></li>
+                            <li><a href="#"><i class="fas fa-cog me-2"></i>Account Settings</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" value="{{ user.first_name }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" value="{{ user.last_name }}">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" value="{{ user.email }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" value="{{ user.phone|default:'' }}">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" rows="3">{{ user.address|default:'' }}</textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Change Password</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">New Password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

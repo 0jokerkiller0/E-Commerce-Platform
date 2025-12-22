@@ -16,9 +16,14 @@ def home(request):
     return render(request, 'home.html', context)
 
 def products_list(request):
-    """Display all products"""
+    """Display all products with optional category filtering"""
     products = Product.objects.filter(is_active=True)
     categories = Category.objects.filter(is_active=True)
+    
+    # Filter by category if specified
+    category_id = request.GET.get('category')
+    if category_id:
+        products = products.filter(category_id=category_id)
     
     context = {
         'products': products,

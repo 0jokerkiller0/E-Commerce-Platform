@@ -13,8 +13,8 @@
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
                     <div class="search-box d-flex">
-                        <input type="text" placeholder="Search for products, brands, vendors..." class="flex-grow-1">
-                        <button type="submit"><i class="fas fa-search"></i></button>
+                        <input type="text" placeholder="Search for products, brands, vendors..." class="flex-grow-1 form-control form-control-lg">
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </div>
@@ -54,51 +54,65 @@
                 {% if categories %}
                     {% for category in categories %}
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon">
-                                <i class="fas fa-{% if category.name == 'Electronics' %}laptop{% elif category.name == 'Fashion' %}tshirt{% elif category.name == 'Home' %}home{% elif category.name == 'Books' %}book{% else %}cube{% endif %}"></i>
+                        <a href="{% url 'products_list' %}?category={{ category.id }}" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon">
+                                    <i class="fas fa-{% if category.name == 'Electronics' %}laptop{% elif category.name == 'Fashion' %}tshirt{% elif category.name == 'Home' %}home{% elif category.name == 'Books' %}book{% else %}cube{% endif %}"></i>
+                                </div>
+                                <h6 class="mb-0">{{ category.name }}</h6>
                             </div>
-                            <h6 class="mb-0">{{ category.name }}</h6>
-                        </div>
+                        </a>
                     </div>
                     {% endfor %}
                 {% else %}
                     <!-- Default Categories -->
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-laptop"></i></div>
-                            <h6 class="mb-0">Electronics</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=1" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-laptop"></i></div>
+                                <h6 class="mb-0">Electronics</h6>
+                            </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-tshirt"></i></div>
-                            <h6 class="mb-0">Fashion</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=2" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-tshirt"></i></div>
+                                <h6 class="mb-0">Fashion</h6>
+                            </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-home"></i></div>
-                            <h6 class="mb-0">Home & Living</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=3" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-home"></i></div>
+                                <h6 class="mb-0">Home & Living</h6>
+                            </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-book"></i></div>
-                            <h6 class="mb-0">Books</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=4" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-book"></i></div>
+                                <h6 class="mb-0">Books</h6>
+                            </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-futbol"></i></div>
-                            <h6 class="mb-0">Sports</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=5" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-futbol"></i></div>
+                                <h6 class="mb-0">Sports</h6>
+                            </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card category-card h-100">
-                            <div class="category-icon"><i class="fas fa-gem"></i></div>
-                            <h6 class="mb-0">Jewelry</h6>
-                        </div>
+                        <a href="{% url 'products_list' %}?category=6" class="text-decoration-none">
+                            <div class="card category-card h-100">
+                                <div class="category-icon"><i class="fas fa-gem"></i></div>
+                                <h6 class="mb-0">Jewelry</h6>
+                            </div>
+                        </a>
                     </div>
                 {% endif %}
             </div>
@@ -116,7 +130,7 @@
                 {% if featured_products %}
                     {% for product in featured_products %}
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100">
+                        <div class="card h-100 product-card">
                             <div class="position-relative overflow-hidden">
                                 {% if product.images.first %}
                                 <img src="{{ product.images.first.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
@@ -128,7 +142,11 @@
                                 <span class="badge badge-discount">{{ product.get_discount_percentage|default:"10" }}% OFF</span>
                                 {% endif %}
                                 <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
-                                    <button class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -158,11 +176,18 @@
                 {% else %}
                     <!-- Demo Products -->
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100">
+                        <div class="card h-100 product-card">
                             <div class="position-relative overflow-hidden">
                                 <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Headphones">
                                 <span class="badge badge-new">New</span>
                                 <span class="badge badge-discount">15% OFF</span>
+                                <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                    <form method="post" action="{% url 'add_to_cart' 1 %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p class="text-muted small mb-1">Tech Store</p>
@@ -179,10 +204,17 @@
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100">
+                        <div class="card h-100 product-card">
                             <div class="position-relative overflow-hidden">
                                 <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Watch">
                                 <span class="badge badge-new">New</span>
+                                <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                    <form method="post" action="{% url 'add_to_cart' 2 %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p class="text-muted small mb-1">Fashion Hub</p>
@@ -199,10 +231,17 @@
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100">
+                        <div class="card h-100 product-card">
                             <div class="position-relative overflow-hidden">
                                 <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Shoes">
                                 <span class="badge badge-discount">20% OFF</span>
+                                <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                    <form method="post" action="{% url 'add_to_cart' 3 %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p class="text-muted small mb-1">Sports Zone</p>
@@ -219,10 +258,17 @@
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100">
+                        <div class="card h-100 product-card">
                             <div class="position-relative overflow-hidden">
                                 <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&h=220&fit=crop" class="card-img-top product-image" alt="Perfume">
                                 <span class="badge badge-new">New</span>
+                                <div class="position-absolute bottom-0 start-0 end-0 p-2 add-to-cart-btn">
+                                    <form method="post" action="{% url 'add_to_cart' 4 %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary w-100 btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p class="text-muted small mb-1">Beauty Store</p>
@@ -248,29 +294,29 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-3 col-6">
-                    <div class="feature-box h-100">
-                        <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <div class="feature-box h-100 text-center">
+                        <div class="feature-icon mx-auto"><i class="fas fa-shipping-fast"></i></div>
                         <h6>Free Shipping</h6>
                         <p class="text-muted small mb-0">On orders above ₹499</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="feature-box h-100">
-                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-box h-100 text-center">
+                        <div class="feature-icon mx-auto"><i class="fas fa-shield-alt"></i></div>
                         <h6>Secure Payment</h6>
                         <p class="text-muted small mb-0">100% protected</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="feature-box h-100">
-                        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <div class="feature-box h-100 text-center">
+                        <div class="feature-icon mx-auto"><i class="fas fa-headset"></i></div>
                         <h6>24/7 Support</h6>
                         <p class="text-muted small mb-0">Dedicated support</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="feature-box h-100">
-                        <div class="feature-icon"><i class="fas fa-undo"></i></div>
+                    <div class="feature-box h-100 text-center">
+                        <div class="feature-icon mx-auto"><i class="fas fa-undo"></i></div>
                         <h6>Easy Returns</h6>
                         <p class="text-muted small mb-0">7 days return policy</p>
                     </div>
@@ -288,49 +334,49 @@
             </div>
             <div class="row g-4">
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">T</div>
-                        <h6>Tech Store</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">T</div>
+                        <h6 class="mt-2">Tech Store</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.8</div>
                         <p class="text-muted small">120 Products</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">F</div>
-                        <h6>Fashion Hub</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">F</div>
+                        <h6 class="mt-2">Fashion Hub</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.6</div>
                         <p class="text-muted small">85 Products</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">S</div>
-                        <h6>Sports Zone</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">S</div>
+                        <h6 class="mt-2">Sports Zone</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.9</div>
                         <p class="text-muted small">65 Products</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">B</div>
-                        <h6>Beauty Store</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">B</div>
+                        <h6 class="mt-2">Beauty Store</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.7</div>
                         <p class="text-muted small">90 Products</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">H</div>
-                        <h6>Home Decor</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">H</div>
+                        <h6 class="mt-2">Home Decor</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.5</div>
                         <p class="text-muted small">45 Products</p>
                     </div>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card vendor-card h-100">
-                        <div class="vendor-avatar">G</div>
-                        <h6>Gadget World</h6>
+                    <div class="card vendor-card h-100 text-center">
+                        <div class="vendor-avatar mx-auto">G</div>
+                        <h6 class="mt-2">Gadget World</h6>
                         <div class="rating small"><i class="fas fa-star"></i> 4.4</div>
                         <p class="text-muted small">110 Products</p>
                     </div>
@@ -355,3 +401,47 @@
         </div>
     </section>
 {% endblock %}
+
+<style>
+    /* Add hover effects to product cards */
+    .product-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Add hover effects to category cards */
+    .category-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Add hover effects to vendor cards */
+    .vendor-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+    
+    .vendor-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Add hover effects to feature boxes */
+    .feature-box {
+        transition: transform 0.3s;
+    }
+    
+    .feature-box:hover {
+        transform: translateY(-3px);
+    }
+</style>
