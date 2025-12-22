@@ -21,12 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=r%+%z$3^@&5!k63!3o!+*5u%_k%2!+2%_%$+5%$+5%$+5%$+5%'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-=r%+%z$3^@&5!k63!3o!+*5u%_k%2!+2%_%$+5%$+5%$+5%$+5%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# ALLOWED_HOSTS should be set in environment variables
+# For Render deployment, we allow the RENDER_EXTERNAL_HOSTNAME
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Add Render external hostname if available
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
