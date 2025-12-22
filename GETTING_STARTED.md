@@ -10,6 +10,10 @@ Your Django E-Commerce Multivendor Platform has been successfully set up!
 - **Frontend**: http://127.0.0.1:8000/
 - **Admin Panel**: http://127.0.0.1:8000/admin/
 
+### Live Demo:
+A live demo of this application is available at: [https://your-app-name.onrender.com](https://your-app-name.onrender.com)
+*(Replace with your actual Render deployment URL)*
+
 ### 2. Create a Superuser (Admin Account)
 
 Open a new terminal and run:

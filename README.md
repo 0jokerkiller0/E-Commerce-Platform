@@ -84,6 +84,12 @@ python manage.py runserver
 - Frontend: http://localhost:8000/
 - Admin Panel: http://localhost:8000/admin/
 
+## Live Demo
+
+A live demo of this application is available at: [https://your-app-name.onrender.com](https://your-app-name.onrender.com)
+
+*(Replace the above link with your actual Render deployment URL)*
+
 ## Project Structure
 
 ```
