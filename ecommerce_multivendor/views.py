@@ -40,8 +40,3 @@ def vendors_list(request):
     }
     return render(request, 'vendors_list.html', context)
 
-def cart_view(request):
-    """Display shopping cart"""
-    # Cart functionality will be added later
-    context = {}
-    return render(request, 'cart.html', context)

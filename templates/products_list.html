@@ -75,7 +75,7 @@
                     {% if products %}
                         {% for product in products %}
                         <div class="col-6 col-md-4">
-                            <div class="card h-100 product-card">
+                            <div class="card h-100 product-card" data-product-id="{{ product.id }}">
                                 <div class="position-relative overflow-hidden">
                                     {% if product.images.first %}
                                     <img src="{{ product.images.first.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
@@ -97,7 +97,11 @@
                                     <div class="rating mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span class="text-muted small"> (4.0)</span></div>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="price-tag">₹{{ product.price }}</span>
+                                        {% if product.id in wishlist_products %}
+                                        <button class="btn btn-sm btn-danger"><i class="fas fa-heart"></i></button>
+                                        {% else %}
                                         <button class="btn btn-sm btn-outline-danger"><i class="far fa-heart"></i></button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

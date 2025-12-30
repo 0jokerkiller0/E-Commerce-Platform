@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.http import JsonResponse
-from products.models import Product
+from products.models import Product, Wishlist
 from .models import Cart, CartItem
 
 def cart_view(request):
@@ -112,3 +112,31 @@ def update_cart_item(request, item_id):
         return redirect('cart')
     
     return redirect('cart')
+
+
+def toggle_wishlist(request, product_id):
+    """Toggle product in user's wishlist"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'message': 'Login required'})
+    
+    product = get_object_or_404(Product, id=product_id)
+    
+    wishlist_item, created = Wishlist.objects.get_or_create(
+        user=request.user,
+        product=product
+    )
+    
+    if not created:
+        # Item already in wishlist, remove it
+        wishlist_item.delete()
+        message = 'Removed from wishlist'
+        in_wishlist = False
+    else:
+        message = 'Added to wishlist'
+        in_wishlist = True
+    
+    return JsonResponse({
+        'success': True,
+        'message': message,
+        'in_wishlist': in_wishlist
+    })

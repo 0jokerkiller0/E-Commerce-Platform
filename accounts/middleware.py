@@ -4,7 +4,7 @@ from django.urls import reverse
 
 class AdminAccessMiddleware:
     """
-    Middleware to restrict admin panel access to users with user_type 'admin'
+    Middleware to restrict admin panel access to users with user_type 'admin' or superuser status
     """
     def __init__(self, get_response):
         self.get_response = get_response
@@ -14,8 +14,8 @@ class AdminAccessMiddleware:
         if request.path.startswith('/admin/'):
             # Check if user is authenticated
             if request.user.is_authenticated:
-                # Check if user has the correct user_type
-                if request.user.user_type != 'admin':
+                # Allow access if user is a superuser or has the correct user_type
+                if not (request.user.is_superuser or request.user.user_type == 'admin'):
                     messages.error(request, 'You do not have permission to access the admin panel.')
                     return redirect('home')
             else:

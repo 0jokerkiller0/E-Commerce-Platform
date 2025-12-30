@@ -367,6 +367,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // CSRF token for AJAX requests
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
         $(document).ready(function() {
             // Handle Add to Cart form submissions with AJAX
             $('.add-to-cart-form').on('submit', function(e) {
@@ -381,7 +399,7 @@
                     url: url,
                     data: formData,
                     headers: {
-                        'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val(),
+                        'X-CSRFToken': csrftoken,
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     success: function(response) {
@@ -395,6 +413,66 @@
                     },
                     error: function(xhr, status, error) {
                         alert('Error adding item to cart. Please try again.');
+                    }
+                });
+            });
+            
+            // Handle Wishlist/Favorite button clicks
+            $(document).on('click', '.btn-outline-danger, .btn-danger', function(e) {
+                e.preventDefault();
+                
+                var button = $(this);
+                var productId = button.closest('.card').data('product-id');
+                var icon = button.find('i');
+                
+                if (!productId) {
+                    // Extract product ID from form action URL
+                    var formAction = button.closest('.card').find('form.add-to-cart-form').attr('action');
+                    if (formAction) {
+                        // Extract ID from /cart/add/{id}/ format
+                        var match = formAction.match(/\/cart\/add\/(\d+)\//);
+                        if (match) {
+                            productId = match[1];
+                        }
+                    }
+                }
+                
+                if (!productId) {
+                    alert('Product ID not found');
+                    return;
+                }
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/cart/toggle-wishlist/' + productId + '/',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            if (response.in_wishlist) {
+                                icon.removeClass('far').addClass('fas');
+                                button.removeClass('btn-outline-danger').addClass('btn-danger');
+                                alert('Added to wishlist');
+                            } else {
+                                icon.removeClass('fas').addClass('far');
+                                button.removeClass('btn-danger').addClass('btn-outline-danger');
+                                alert('Removed from wishlist');
+                            }
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Check if it's an authentication error
+                        if (xhr.status === 403 || xhr.status === 401) {
+                            if (confirm('Please log in to add items to your wishlist. Go to login page?')) {
+                                window.location.href = '/login/';
+                            }
+                        } else {
+                            alert('Error updating wishlist. Please try again.');
+                        }
                     }
                 });
             });

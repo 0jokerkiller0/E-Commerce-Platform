@@ -13,7 +13,10 @@ class Command(BaseCommand):
                 email='admin@example.com',
                 password='admin123',  # Change this password after first login!
                 first_name='Admin',
-                last_name='User'
+                last_name='User',
+                user_type='admin',
+                is_staff=True,
+                is_superuser=True
             )
             self.stdout.write(self.style.SUCCESS('Successfully created superuser: admin'))
         else:

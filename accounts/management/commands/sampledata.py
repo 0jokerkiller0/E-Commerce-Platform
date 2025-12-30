@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from products.models import Category, Product
-from accounts.models import Vendor
+from vendors.models import Vendor
+from accounts.models import User
 
 class Command(BaseCommand):
     help = 'Create sample data for demonstration purposes'
@@ -26,23 +27,23 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f'Category already exists: {category.name}')
 
-        # Create vendors
-        Vendor = get_user_model()
+        # Create vendor users
+        User = get_user_model()
         vendor_users = []
         
         # Create vendor users
         vendor_data = [
-            {'username': 'techstore', 'email': 'tech@store.com', 'password': 'vendor123'},
-            {'username': 'fashionhub', 'email': 'fashion@hub.com', 'password': 'vendor123'},
-            {'username': 'sportszone', 'email': 'sports@zone.com', 'password': 'vendor123'},
+            {'username': 'techstore', 'email': 'tech@store.com', 'password': 'vendor123', 'user_type': 'vendor'},
+            {'username': 'fashionhub', 'email': 'fashion@hub.com', 'password': 'vendor123', 'user_type': 'vendor'},
+            {'username': 'sportszone', 'email': 'sports@zone.com', 'password': 'vendor123', 'user_type': 'vendor'},
         ]
         
         for data in vendor_data:
-            vendor_user, created = Vendor.objects.get_or_create(
+            vendor_user, created = User.objects.get_or_create(
                 username=data['username'],
                 defaults={
                     'email': data['email'],
-                    'is_vendor': True
+                    'user_type': data['user_type']
                 }
             )
             if created:
@@ -59,24 +60,27 @@ class Command(BaseCommand):
                 'user': vendor_users[0],
                 'store_name': 'Tech Store',
                 'store_description': 'Your one-stop shop for all electronics and gadgets',
-                'phone_number': '+91 9876543210',
-                'address': '123 Tech Street, Electronic City',
+                'business_email': 'tech@store.com',
+                'business_phone': '+91 9876543210',
+                'business_address': '123 Tech Street, Electronic City',
                 'is_active': True
             },
             {
                 'user': vendor_users[1],
                 'store_name': 'Fashion Hub',
                 'store_description': 'Trendy fashion and accessories for everyone',
-                'phone_number': '+91 9876543211',
-                'address': '456 Fashion Avenue, Style City',
+                'business_email': 'fashion@hub.com',
+                'business_phone': '+91 9876543211',
+                'business_address': '456 Fashion Avenue, Style City',
                 'is_active': True
             },
             {
                 'user': vendor_users[2],
                 'store_name': 'Sports Zone',
                 'store_description': 'Premium sports gear and fitness equipment',
-                'phone_number': '+91 9876543212',
-                'address': '789 Sports Road, Fitness City',
+                'business_email': 'sports@zone.com',
+                'business_phone': '+91 9876543212',
+                'business_address': '789 Sports Road, Fitness City',
                 'is_active': True
             }
         ]
@@ -84,7 +88,14 @@ class Command(BaseCommand):
         for profile_data in vendor_profiles_data:
             vendor_profile, created = Vendor.objects.get_or_create(
                 user=profile_data['user'],
-                defaults=profile_data
+                defaults={
+                    'store_name': profile_data['store_name'],
+                    'store_description': profile_data['store_description'],
+                    'business_email': profile_data['business_email'],
+                    'business_phone': profile_data['business_phone'],
+                    'business_address': profile_data['business_address'],
+                    'is_active': profile_data['is_active']
+                }
             )
             if created:
                 self.stdout.write(f'Created vendor profile: {vendor_profile.store_name}')
@@ -111,7 +122,7 @@ class Command(BaseCommand):
                 'description': 'High-quality wireless headphones with noise cancellation',
                 'price': 2499.00,
                 'compare_price': 2999.00,
-                'quantity': 50,
+                'stock': 50,
                 'is_active': True,
                 'is_featured': True
             },
@@ -123,7 +134,7 @@ class Command(BaseCommand):
                 'description': 'Advanced smartwatch with health monitoring features',
                 'price': 15999.00,
                 'compare_price': 17999.00,
-                'quantity': 30,
+                'stock': 30,
                 'is_active': True,
                 'is_featured': True
             },
@@ -136,7 +147,7 @@ class Command(BaseCommand):
                 'description': 'Comfortable and stylish cotton t-shirt for everyday wear',
                 'price': 799.00,
                 'compare_price': 999.00,
-                'quantity': 100,
+                'stock': 100,
                 'is_active': True,
                 'is_featured': True
             },
@@ -148,7 +159,7 @@ class Command(BaseCommand):
                 'description': 'Genuine leather jacket for a stylish look',
                 'price': 4999.00,
                 'compare_price': 5999.00,
-                'quantity': 25,
+                'stock': 25,
                 'is_active': True,
                 'is_featured': False
             },
@@ -161,7 +172,7 @@ class Command(BaseCommand):
                 'description': 'Professional running shoes for athletes',
                 'price': 3199.00,
                 'compare_price': 3999.00,
-                'quantity': 40,
+                'stock': 40,
                 'is_active': True,
                 'is_featured': True
             },
@@ -173,7 +184,7 @@ class Command(BaseCommand):
                 'description': 'Non-slip premium yoga mat for all your yoga sessions',
                 'price': 1299.00,
                 'compare_price': 1499.00,
-                'quantity': 60,
+                'stock': 60,
                 'is_active': True,
                 'is_featured': False
             }
